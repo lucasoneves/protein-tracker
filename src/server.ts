@@ -9,6 +9,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use('/api', protect, router);
+
+// Users routes
 app.post('/signup', express.urlencoded({ extended: true}), signup);
 app.post('/signin', signin)
 
