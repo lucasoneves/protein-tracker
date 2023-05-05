@@ -1,19 +1,10 @@
-// import jwt from 'jsonwebtoken';
+import * as bcrypt from "bcrypt";
 
-// export const createJWT = (user) => {
-//   const token = jwt.sign({
-//     id: user.id, username: user.username
-//   }, process.env.JWT_SECRET
-//   )
-// }
-
-import exp from "constants";
 import jwt from "jsonwebtoken";
 
 export const createJWT = (user: any) => {
   const token = jwt.sign(
     {
-      exp: Math.floor(Date.now() / 1000) + 60 * 60,
       id: user.id,
       username: user.username,
     },
@@ -49,4 +40,12 @@ export const protect = (req: any, res: any, next:any) => {
     res.json({ message: "Not allowed", error: e})
     return;
   }
+};
+
+export const comparePasswords = (password, hash) => {
+  return bcrypt.compare(password, hash);
+};
+
+export const hashPassword = (password) => {
+  return bcrypt.hash(password, 5);
 };
