@@ -10,7 +10,7 @@
 import exp from "constants";
 import jwt from "jsonwebtoken";
 
-export const createJWT = (user) => {
+export const createJWT = (user: any) => {
   const token = jwt.sign(
     {
       exp: Math.floor(Date.now() / 1000) + 60 * 60,
@@ -22,33 +22,31 @@ export const createJWT = (user) => {
   return token;
 };
 
-export const protect = (req, res, next) => {
+export const protect = (req: any, res: any, next:any) => {
   const bearer = req.headers.authorization;
 
   if (!bearer) {
     res.status(401);
-    res.send("Not authorized");
+    res.json({ message: 'Missing token', status: 401 });
     return;
   }
 
   const [, token] = bearer.split(" ");
   if (!token) {
-    console.log("here");
     res.status(401);
-    res.send("Not authorized");
+    res.json({ message: 'Not authorized', status: 401 });
     return;
   }
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET!);
     req.user = payload;
-    console.log(payload);
     next();
     return;
   } catch (e) {
     console.error(e);
     res.status(401);
-    res.send("Not authorized");
+    res.json({ message: "Not allowed", error: e})
     return;
   }
 };
