@@ -1,4 +1,7 @@
 import { Router } from "express";
+import { body, validationResult } from "express-validator";
+import { handleInputErrors } from "./modules/middleware";
+import { updateUser } from "./handlers/user";
 
 const router = Router();
 
@@ -14,11 +17,19 @@ const router = Router();
 
 // Protein Amount
 
-router.get('/proteinamount', (req, res) => {
-  res.json({ data: { message: 'sucess', status: 200} });
-})
+router.get("/proteinamount", (req, res) => {
+  res.json({ data: { message: "sucess", status: 200 } });
+});
 router.post("/proteinamount", (req, res) => {});
-router.put('/proteinamount/:id', (req, res) => {})
-router.put('/proteinamount/:id', (req, res) => {})
+router.put("/proteinamount/:id", (req, res) => {});
+router.put("/proteinamount/:id", (req, res) => {});
+
+router.put(
+  "/user/:id",
+  body("username").isString(),
+  handleInputErrors,
+  updateUser,
+  (req, res) => {}
+);
 
 export default router;

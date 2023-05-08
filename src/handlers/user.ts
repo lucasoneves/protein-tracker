@@ -1,6 +1,7 @@
 import prisma from '../db';
 import { comparePasswords, createJWT, hashPassword } from '../modules/auth';
 
+
 export const signup = async (req, res) => {
   const user = await prisma.user.create({
     data: {
@@ -37,5 +38,20 @@ export const signin = async (req, res) => {
   const token = createJWT(user)
 
   res.json({token})
+
+}
+
+export const updateUser = async (req, res) => {
+  const user = await prisma.user.update({
+    where: {
+      id: req.params.id
+    },
+    data: {
+      username: req.body.username
+    }
+  })
+
+  res.json({user})
+
 
 }
