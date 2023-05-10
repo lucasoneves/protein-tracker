@@ -51,7 +51,7 @@ export const updateUser = async (req, res) => {
     }
   })
 
-  res.json({user})
+  res.json({user, message: 'user updated successfully', status: 200})
 
 
 }
