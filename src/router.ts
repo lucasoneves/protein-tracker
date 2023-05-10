@@ -2,7 +2,7 @@ import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import { handleInputErrors } from "./modules/middleware";
 import { updateUser } from "./handlers/user";
-import { getUserProteinInfo } from "./handlers/proteins";
+import { getProteinInfo, updateProteinAmount } from "./handlers/proteins";
 
 const router = Router();
 
@@ -17,11 +17,11 @@ const router = Router();
 // router.delete("/user/:id", (req, res) => {});
 
 // Protein Amount
-router.post("/proteinamount", (req, res) => {});
-router.put("/proteinamount/:id", (req, res) => {});
-router.put("/proteinamount/:id", (req, res) => {});
+// router.post("/proteinamount", (req, res) => {});
+// router.put("/proteinamount/:id", (req, res) => {});
 
-router.get('/proteinamount/:id', handleInputErrors, getUserProteinInfo, (req, res) => {})
+router.put("/proteinamount/:id", updateProteinAmount, (req, res) => {});
+router.get('/proteinamount/:id', handleInputErrors, getProteinInfo, (req, res) => {})
 
 router.put(
   "/user/:id",
