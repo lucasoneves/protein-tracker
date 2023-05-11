@@ -9,7 +9,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use('/api', protect, router);
-app.post('/signup', express.urlencoded({ extended: true}), signup);
+
+// Users routes
+app.post('/signup', signup);
 app.post('/signin', signin)
 
 

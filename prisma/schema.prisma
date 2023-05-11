@@ -21,7 +21,7 @@ model User {
 
 model ProteinAmount {
   id String @id @default(uuid())
-  quantity Float
+  quantity Int @default(0)
   belongsTo User @relation(fields: [belongsToId], references: [id])
   belongsToId String
 }
