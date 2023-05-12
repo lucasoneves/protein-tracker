@@ -9,12 +9,12 @@ export const signup = async (req, res) => {
       password: await hashPassword(req.body.password)
     }
   });
-  
+
   if (!user) {
-    res.json({ error: 'User not created'})
+    res.json({ error: 'User not created' })
     return;
   }
-  
+
   res.status(201)
   res.json({ message: 'user created' })
 
@@ -37,8 +37,33 @@ export const signin = async (req, res) => {
 
   const token = createJWT(user)
 
-  res.json({token})
+  res.json({ token })
 
+}
+
+export const getUserInfo = async (req, res) => {
+  const userId = req.user.id
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId
+    }
+  })
+
+  const proteinAmount = await prisma.proteinAmount.findFirst({
+    where: {
+      id: userId,
+      belongsToId: userId
+    }
+  })
+
+  if (!user) {
+    res.status(404)
+    res.json({ message: "User not found" })
+  }
+
+  res.json({
+    data: [{user, proteinAmount}]
+  })
 }
 
 export const updateUser = async (req, res) => {
@@ -51,7 +76,7 @@ export const updateUser = async (req, res) => {
     }
   })
 
-  res.json({user, message: 'user updated successfully', status: 200})
+  res.json({ user, message: 'user updated successfully', status: 200 })
 
 
 }
