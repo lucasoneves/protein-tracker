@@ -20,7 +20,7 @@ const router = Router();
 router.get("/proteinamount", getUserInfo, (req, res) => {});
 // router.put("/proteinamount/:id", (req, res) => {});
 
-router.put("/proteinamount/:id", updateProteinAmount, (req, res) => {});
+router.put("/proteinamount", updateProteinAmount, (req, res) => {});
 router.get('/proteinamount/:id', handleInputErrors, getProteinInfo, (req, res) => {})
 
 router.put(
