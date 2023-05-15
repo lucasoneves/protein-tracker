@@ -58,7 +58,7 @@ export const getUserInfo = async (req, res) => {
   }
 
   res.json({
-    data: [{ user: user?.username, proteinAmount: proteinAmount }],
+    data: [{ user: user?.username, proteinAmount }],
   });
 };
 
@@ -74,3 +74,17 @@ export const updateUser = async (req, res) => {
 
   res.json({ user, message: "user updated successfully", status: 200 });
 };
+
+export const deleteUser = async (req, res) => {
+  const user = await prisma.user.delete({
+    where: {
+      id: req.user.id
+    }
+  })
+
+  if (user.id != req.user.id) {
+    res.json({ message: 'Could not delete'})
+  }
+
+  res.json({ message: 'user deleted' })
+}

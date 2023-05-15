@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import { handleInputErrors } from "./modules/middleware";
-import { updateUser, getUserInfo } from "./handlers/user";
+import { updateUser, getUserInfo, deleteUser } from "./handlers/user";
 import { getProteinInfo, updateProteinAmount } from "./handlers/proteins";
 
 const router = Router();
@@ -30,5 +30,7 @@ router.put(
   updateUser,
   (req, res) => {}
 );
+
+router.delete('/user/:id', deleteUser, (req, res) => {})
 
 export default router;
