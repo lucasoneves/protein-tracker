@@ -12,27 +12,17 @@ datasource db {
 
 model User {
   id String @id @default(uuid())
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now()) @db.Timestamptz()
   username String @unique
   password String
-  updates Update[]
   proteinAmount ProteinAmount[]
 }
 
 model ProteinAmount {
+  createdAt DateTime  @default(now()) @db.Timestamptz()
   id String @id @default(uuid())
   quantity Float @default(0)
   belongsTo User @relation(fields: [belongsToId], references: [id])
-  belongsToId String
-}
-
-model Update {
-  amount Float
-  id String @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-  userId String
-  belongsTo   User     @relation(fields: [belongsToId], references: [id])
   belongsToId String
 }
 
