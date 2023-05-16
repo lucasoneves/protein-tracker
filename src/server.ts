@@ -1,7 +1,7 @@
 import express from 'express';
 import router from './router';
 import { protect } from './modules/auth';
-import { signup, signin } from './handlers/user';
+import { signup, signin } from './handlers/auth';
 
 const app = express();
 
