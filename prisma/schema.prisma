@@ -15,6 +15,7 @@ model User {
   createdAt DateTime  @default(now()) @db.Timestamptz()
   username String @unique
   password String
+  email String @unique
   proteinAmount ProteinAmount[]
 }
 
