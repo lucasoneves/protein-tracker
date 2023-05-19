@@ -15,15 +15,17 @@ model User {
   createdAt DateTime  @default(now()) @db.Timestamptz()
   username String @unique
   password String
+  email String @unique @db.Text()
   proteinAmount ProteinAmount[]
 }
 
 model ProteinAmount {
   createdAt DateTime  @default(now()) @db.Timestamptz()
   id String @id @default(uuid())
-  quantity Float @default(0)
-  belongsTo User @relation(fields: [belongsToId], references: [id])
-  belongsToId String
+  quantity Float
+  belongsToId String   @db.VarChar(255)
+  belongsTo   User     @relation(fields: [belongsToId], references: [id])
+  @@unique([id, belongsToId])
 }
 
 model Ingredient {

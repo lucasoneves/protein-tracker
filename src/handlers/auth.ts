@@ -5,6 +5,7 @@ export const signup = async (req, res) => {
   const user = await prisma.user.create({
     data: {
       username: req.body.username,
+      email: req.body.email,
       password: await hashPassword(req.body.password),
     },
   });
@@ -21,7 +22,7 @@ export const signup = async (req, res) => {
 export const signin = async (req, res) => {
   const user = await prisma.user.findUnique({
     where: {
-      username: req.body.username,
+      email: req.body.email,
     },
   });
 
@@ -34,6 +35,18 @@ export const signin = async (req, res) => {
   }
 
   const token = createJWT(user);
+
+  res.json({ token });
+};
+
+export const signout = async (req, res) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email: req.user.email,
+    },
+  });
+
+  const token = (user);
 
   res.json({ token });
 };

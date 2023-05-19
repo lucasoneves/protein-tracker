@@ -20,7 +20,14 @@ export const getUserInfo = async (req, res) => {
   }
 
   res.json({
-    data: [{ user: user?.username, proteinAmount }],
+    data: [
+      {
+        email: user?.email,
+        id: user?.id,
+        username: user?.username,
+        proteinAmount,
+      },
+    ],
   });
 };
 
@@ -40,14 +47,14 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   const proteinAmount = await prisma.proteinAmount.deleteMany({
     where: {
-      belongsToId: req.user.id
-    }
-  })
+      belongsToId: req.user.id,
+    },
+  });
   const user = await prisma.user.delete({
     where: {
       id: req.user.id,
-    }
-  })
+    },
+  });
 
-  res.json({ message: 'user deleted' })
-}
+  res.json({ message: "user deleted" });
+};
