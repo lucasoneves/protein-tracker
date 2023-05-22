@@ -2,13 +2,14 @@ import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import { handleInputErrors } from "./modules/middleware";
 import { updateUser, getUserInfo, deleteUser } from "./handlers/user";
-import { getProteinInfo, updateProteinAmount, deleteProteinAmount } from "./handlers/proteins";
+import { getProteinInfo, createProteinAmount, updateProteinAmount, deleteProteinAmount } from "./handlers/proteins";
 
 const router = Router();
 
 // Protein Amount
 router.get("/proteinamount", getUserInfo);
-router.put("/proteinamount", updateProteinAmount);
+router.post('/proteinamount/:id', createProteinAmount)
+router.put("/proteinamount/:id", updateProteinAmount);
 router.get('/proteinamount/:id', handleInputErrors, getProteinInfo)
 router.delete("/proteinamount/:id", deleteProteinAmount)
 

@@ -13,7 +13,7 @@ export const getProteinInfo = async (req, res) => {
   res.json({ data: { proteinAmount, status: 200, user: req.user.username } });
 };
 
-export const updateProteinAmount = async (req, res) => {
+export const createProteinAmount = async (req, res) => {
   const proteinAmount = await prisma.proteinAmount.create({
     data: {
       quantity: req.body.quantity,
@@ -22,6 +22,22 @@ export const updateProteinAmount = async (req, res) => {
   });
 
   res.json({ data: { proteinAmount, status: 200, user: req.user.username } });
+};
+
+export const updateProteinAmount = async (req, res) => {
+  const updated = await prisma.proteinAmount.update({
+    where: {
+      id_belongsToId: {
+        id: req.params.id,
+        belongsToId: req.user.id,
+      },
+    },
+    data: {
+      quantity: req.body.quantity,
+    },
+  });
+
+  res.json({ data: { updated, status: 200, user: req.user.username } });
 };
 
 export const deleteProteinAmount = async (req, res) => {
@@ -33,8 +49,8 @@ export const deleteProteinAmount = async (req, res) => {
   });
 
   if (!deleted.count) {
-    res.status(404)
-    res.json({message: "Couldn't delete protein"})
+    res.status(404);
+    res.json({ message: "Couldn't delete protein" });
   }
 
   res.json({ data: deleted, message: "Protein item deleted" });
