@@ -50,3 +50,13 @@ export const signout = async (req, res) => {
 
   res.json({ token });
 };
+
+export const forgotPassword = async (req, res) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email: req.body.email,
+    }
+  })
+
+  res.json({ user: user?.id, status: 200 });
+}
