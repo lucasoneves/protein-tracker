@@ -8,7 +8,7 @@ const router = Router();
 
 // Protein Amount
 router.get("/proteinamount", getUserInfo);
-router.post('/proteinamount/:id', createProteinAmount)
+router.post('/proteinamount/', createProteinAmount)
 router.put("/proteinamount/:id", updateProteinAmount);
 router.get('/proteinamount/:id', handleInputErrors, getProteinInfo)
 router.delete("/proteinamount/:id", deleteProteinAmount)

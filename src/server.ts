@@ -14,7 +14,10 @@ app.use('/api', protect, router);
 app.post('/signup', signup);
 app.post('/signin', signin)
 
-app.post('/forgotpassword', forgotPassword);
+app.post('/forgot-password', (req, res) => {});
+app.get('/forgot-password', (req, res) => {});
 
+app.get('/reset-password', (req, res) => {});
+app.post('/reset-password', (req, res) => {})
 
 export default app;
