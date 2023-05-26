@@ -6,9 +6,10 @@ export const createJWT = (user: any) => {
   const token = jwt.sign(
     {
       id: user.id,
-      username: user.username,
+      email: user.username
     },
-    process.env.JWT_SECRET!
+    process.env.JWT_SECRET + user.password,
+    { expiresIn: '15m'}
   );
   return token;
 };
