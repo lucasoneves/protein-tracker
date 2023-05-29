@@ -8,14 +8,14 @@ export const createJWT = (user: any) => {
       id: user.id,
       email: user.username
     },
-    process.env.JWT_SECRET + user.password,
+    process.env.JWT_SECRET!,
     { expiresIn: '15m'}
   );
   return token;
 };
 
 
-export const protect = (req: any, res: any, next:any) => {
+export const protect = (req, res, next) => {
   const bearer = req.headers.authorization;
 
   if (!bearer) {
@@ -32,14 +32,15 @@ export const protect = (req: any, res: any, next:any) => {
   }
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET!);
+    const secret = process.env.JWT_SECRET!
+    const payload = jwt.verify(token, secret);
     req.user = payload;
     next();
     return;
   } catch (e) {
-    console.error(e);
+    console.log(e)
     res.status(401);
-    res.json({ message: "Not allowed", error: e})
+    res.json({ message: "User not allowed", error: e})
     return;
   }
 };
