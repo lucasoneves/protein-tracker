@@ -1,7 +1,8 @@
 import express from 'express';
 import router from './router';
 import { protect } from './modules/auth';
-import { signup, signin, forgotPassword } from './handlers/auth';
+import { signup, signin } from './handlers/auth';
+import { forgotPasswordHandler, resetPasswordHandler, sendNewPassword } from './handlers/password';
 
 const app = express();
 
@@ -14,7 +15,12 @@ app.use('/api', protect, router);
 app.post('/signup', signup);
 app.post('/signin', signin)
 
-app.post('/forgotpassword', forgotPassword);
+app.post('/forgot-password', forgotPasswordHandler, (req, res) => {});
+// app.get('/forgot-password', (req, res) => {});
 
+app.get('/reset-password/:id/:token', resetPasswordHandler, (req, res, next) => {
+  
+});
+app.post('/reset-password/:id/:token', sendNewPassword, (req, res) => {})
 
 export default app;
