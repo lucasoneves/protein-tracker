@@ -49,7 +49,7 @@ export const resetPasswordHandler = async (req, res) => {
     return
   }
 
-  const secret = process.env.JWT_SECRET + user.password
+  const secret = process.env.JWT_SECRET!
 
   try {
     const payload = jwt.verify(token, secret)
@@ -85,8 +85,7 @@ export const sendNewPassword = async (req, res) => {
     return
   }
 
-  const secret = process.env.JWT_SECRET + user.password
-
+  const secret = process.env.JWT_SECRET!
   try {
     const payload = jwt.verify(token, secret)
     // Verify password and confirm_password
