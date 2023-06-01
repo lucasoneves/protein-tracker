@@ -9,9 +9,14 @@ const router = Router();
 // Protein Amount
 router.get("/proteinamount", getUserInfo);
 router.post('/proteinamount/', createProteinAmount)
+
+
 router.put("/proteinamount/:id", updateProteinAmount);
 router.get('/proteinamount/:id', handleInputErrors, getProteinInfo)
 router.delete("/proteinamount/:id", deleteProteinAmount)
+
+router.post('/proteintarget/', (req, res) => { res.json( {message: 'sucesso'})})
+router.get('/proteintarget/', (req, res) => { res.json( {message: 'get protein target'})})
 
 router.put(
   "/user/:id",

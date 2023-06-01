@@ -14,6 +14,12 @@ export const getUserInfo = async (req, res) => {
     },
   });
 
+  const proteintarget = await prisma.proteinTarget.findMany({
+    where: {
+      belongToId: userId
+    }
+  })
+
   if (!user) {
     res.status(404);
     res.json({ message: "User not found" });
@@ -26,6 +32,7 @@ export const getUserInfo = async (req, res) => {
         id: user?.id,
         username: user?.username,
         proteinAmount,
+        proteintarget
       },
     ],
   });
