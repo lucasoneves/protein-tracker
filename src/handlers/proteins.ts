@@ -56,4 +56,39 @@ export const deleteProteinAmount = async (req, res) => {
   res.json({ data: deleted, message: "Protein item deleted" });
 };
 
+export const setProteinTarget = async (req, res) => {
+
+  const item = await prisma.proteinTarget.findFirst({
+    where: {
+      belongsToId: req.user.id
+    }
+  })
+  if (item) {
+    res.status(400);
+    res.json({ data: { message: 'Já existe um registro'}})
+    return;
+  }
+
+  const target = await prisma.proteinTarget.create({
+    data: {
+      belongsToId: req.user.id,
+      target: req.body.target
+    }
+  })
+
+
+  console.log("TARGET =>", target)
+  res.status(201)
+  res.json({data: target, user: req.user.id})
+}
+
+export const deleteProteinTarget = async (req, res) => {
+  const deleted = await prisma.proteinTarget.deleteMany({
+    where: {
+      belongsToId: req.user.id
+    }
+  })
+  res.json({data: deleted, user: req.user.id})
+}
+
 // 5e4d6bde-f368-4b63-9758-178102d14ef0
