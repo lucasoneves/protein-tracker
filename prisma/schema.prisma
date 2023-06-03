@@ -35,8 +35,10 @@ model ProteinTarget {
   id         String   @id @default(uuid())
   target     Float?
   createdAt  DateTime @default(now()) @db.Timestamptz()
-  belongToId String   @db.VarChar(255)
-  belongsTo  User     @relation(fields: [belongToId], references: [id])
+  belongsToId String   @db.VarChar(255)
+  belongsTo  User     @relation(fields: [belongsToId], references: [id])
+
+  @@unique([id, belongsToId])
 }
 
 model Ingredient {

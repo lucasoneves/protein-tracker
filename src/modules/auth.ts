@@ -8,8 +8,7 @@ export const createJWT = (user: any) => {
       id: user.id,
       email: user.username
     },
-    process.env.JWT_SECRET!,
-    { expiresIn: '15m'}
+    process.env.JWT_SECRET!
   );
   return token;
 };

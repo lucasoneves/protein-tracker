@@ -16,7 +16,7 @@ export const getUserInfo = async (req, res) => {
 
   const proteintarget = await prisma.proteinTarget.findMany({
     where: {
-      belongToId: userId
+      belongsToId: userId
     }
   })
 
