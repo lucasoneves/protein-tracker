@@ -11,28 +11,38 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
-  createdAt DateTime  @default(now()) @db.Timestamptz()
-  username String @unique
-  password String
-  email String @unique @db.Text()
-  provider String?
-  passwordResetToken String?
-  passwordResetAt DateTime?
-  proteinAmount ProteinAmount[]
+  id                 String          @id @default(uuid())
+  createdAt          DateTime        @default(now()) @db.Timestamptz()
+  username           String          @unique
+  password           String
+  email              String          @unique @db.Text()
+  provider           String?
+  proteinAmount      ProteinAmount[]
+  proteinTarget      ProteinTarget[]
 }
 
 model ProteinAmount {
-  createdAt DateTime  @default(now()) @db.Timestamptz()
-  id String @id @default(uuid())
-  quantity Float
+  createdAt   DateTime @default(now()) @db.Timestamptz()
+  id          String   @id @default(uuid())
+  quantity    Float
   belongsToId String   @db.VarChar(255)
   belongsTo   User     @relation(fields: [belongsToId], references: [id])
+
+  @@unique([id, belongsToId])
+}
+
+model ProteinTarget {
+  id         String   @id @default(uuid())
+  target     Float?
+  createdAt  DateTime @default(now()) @db.Timestamptz()
+  belongsToId String   @db.VarChar(255)
+  belongsTo  User     @relation(fields: [belongsToId], references: [id])
+
   @@unique([id, belongsToId])
 }
 
 model Ingredient {
-  id String @id @default(uuid())
-  name String
+  id     String @id @default(uuid())
+  name   String
   amount Float
 }

@@ -2,17 +2,22 @@ import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import { handleInputErrors } from "./modules/middleware";
 import { updateUser, getUserInfo, deleteUser } from "./handlers/user";
-import { getProteinInfo, createProteinAmount, updateProteinAmount, deleteProteinAmount } from "./handlers/proteins";
+import { getProteinInfo, createProteinAmount, updateProteinAmount, deleteProteinAmount, setProteinTarget, deleteProteinTarget } from "./handlers/proteins";
 
 const router = Router();
 
 // Protein Amount
 router.get("/proteinamount", getUserInfo);
 router.post('/proteinamount/', createProteinAmount)
+
+
 router.put("/proteinamount/:id", updateProteinAmount);
 router.get('/proteinamount/:id', handleInputErrors, getProteinInfo)
 router.delete("/proteinamount/:id", deleteProteinAmount)
 
+router.post('/proteintarget/', setProteinTarget)
+router.get('/proteintarget/', (req, res) => { res.json( {message: 'get protein target'})})
+router.delete('/proteintarget/', deleteProteinTarget)
 router.put(
   "/user/:id",
   body("username").isString(),
