@@ -33,8 +33,7 @@ export const forgotPasswordHandler = async (req, res) => {
     const mailOptions = {
       from: 'proteincheck.app@gmail.com',  // sender address
       to: req.body.email,   // list of receivers
-      subject: 'Sending Email using Node.js',
-      text: 'That was easy!',
+      subject: 'Protein Check - Create new password',
       html: `<b>Hey there! </b><br> You requested help recovering your password.
       
       <a href=${link} target="_blank">Click here to create a new password</a>

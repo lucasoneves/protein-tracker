@@ -1,5 +1,5 @@
 import prisma from "../db";
-
+import { validationResult } from "express-validator";
 export const getProteinInfo = async (req, res) => {
   const id = req.params.id;
 
@@ -20,6 +20,9 @@ export const createProteinAmount = async (req, res) => {
       belongsToId: req.user.id,
     },
   });
+
+  const errors = validationResult(req)
+  console.log("ERRORS:", errors)
 
   res.json({ data: { proteinAmount, status: 200, user: req.user.username } });
 };
