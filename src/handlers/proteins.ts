@@ -82,6 +82,28 @@ export const setProteinTarget = async (req, res) => {
   res.json({data: target, user: req.user.id})
 }
 
+export const updateProteinTarget = async (req, res) => {
+
+  const target = await prisma.proteinTarget.update({
+    where: {
+      id_belongsToId: {
+        id: req.params.id,
+        belongsToId: req.user.id,
+      }
+    },
+    data: {
+      target: req.body.target
+    }
+  })
+
+  if (!target) {
+    res.json({data: { message: 'Não foi possível editar a meta de proteína'}})
+  }
+
+  res.status(201)
+  res.json({data: target, user: req.user.id})
+}
+
 export const deleteProteinTarget = async (req, res) => {
   const deleted = await prisma.proteinTarget.deleteMany({
     where: {

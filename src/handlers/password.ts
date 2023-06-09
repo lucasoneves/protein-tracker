@@ -1,7 +1,7 @@
 import prisma from "../db";
 import jwt from "jsonwebtoken";
 import { createJWT, hashPassword } from "../modules/auth";
-
+import nodemailer from 'nodemailer';
 export const forgotPasswordHandler = async (req, res) => {
   // const user = req.user.username;
   try {
@@ -19,13 +19,45 @@ export const forgotPasswordHandler = async (req, res) => {
     const token = createJWT(user)
     const link = `http://localhost:3000/reset-password/${user.id}/${token}`
 
+
+    const transporter = nodemailer.createTransport({
+      port: 465,               // true for 465, false for other ports
+      host: "smtp.gmail.com",
+      auth: {
+        user: 'proteincheck.app@gmail.com',
+        pass: 'aghwiosykcckmpsv',
+      },
+      secure: true,
+    });
+
+    const mailOptions = {
+      from: 'proteincheck.app@gmail.com',  // sender address
+      to: req.body.email,   // list of receivers
+      subject: 'Sending Email using Node.js',
+      text: 'That was easy!',
+      html: `<b>Hey there! </b><br> You requested help recovering your password.
+      
+      <a href=${link} target="_blank">Click here to create a new password</a>
+      `
+      ,
+    };
+
+    transporter.sendMail(mailOptions, function (err, info) {
+      if(err)
+        console.log(err)
+      else
+        console.log(info);
+    });
+
+
     res.json({
       data: {
         message: 'Password link sended to email address',
-        link
+        link,
       }
     })
   } catch (error) {
+    res.status(error)
     res.json({ error })
   }
 
