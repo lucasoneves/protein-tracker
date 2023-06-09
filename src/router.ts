@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import { handleInputErrors } from "./modules/middleware";
 import { updateUser, getUserInfo, deleteUser } from "./handlers/user";
 import {
@@ -16,18 +16,20 @@ const router = Router();
 
 // Protein Amount
 router.get("/proteinamount", getUserInfo);
-router.post("/proteinamount/", createProteinAmount);
-
+router.post("/proteinamount/", body('quantity').isNumeric(), handleInputErrors, createProteinAmount);
 router.put("/proteinamount/:id", updateProteinAmount);
 router.get("/proteinamount/:id", handleInputErrors, getProteinInfo);
 router.delete("/proteinamount/:id", deleteProteinAmount);
 
+// PRotein target
 router.post("/proteintarget/", setProteinTarget);
 router.get("/proteintarget/", (req, res) => {
   res.json({ message: "get protein target" });
 });
 router.delete("/proteintarget/", deleteProteinTarget);
 router.put("/proteintarget/:id", updateProteinTarget);
+
+// User
 router.put(
   "/user/:id",
   body("username").isString(),
