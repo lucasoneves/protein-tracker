@@ -15,7 +15,7 @@ app.use('/api', protect, router);
 app.post('/signup', signup);
 app.post('/signin', signin)
 
-app.post('/forgot-password', forgotPasswordHandler, (req, res) => {});
+app.post('/forgot-password', forgotPasswordHandler);
 // app.get('/forgot-password', (req, res) => {});
 
 app.get('/reset-password/:id/:token', resetPasswordHandler, (req, res, next) => {
