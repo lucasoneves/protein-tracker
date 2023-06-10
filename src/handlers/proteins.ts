@@ -61,6 +61,7 @@ export const deleteProteinAmount = async (req, res) => {
 
 export const setProteinTarget = async (req, res) => {
 
+  
   const item = await prisma.proteinTarget.findFirst({
     where: {
       belongsToId: req.user.id
@@ -71,7 +72,6 @@ export const setProteinTarget = async (req, res) => {
     res.json({ data: { message: 'Já existe um registro'}})
     return;
   }
-
   const target = await prisma.proteinTarget.create({
     data: {
       belongsToId: req.user.id,
@@ -79,8 +79,6 @@ export const setProteinTarget = async (req, res) => {
     }
   })
 
-
-  console.log("TARGET =>", target)
   res.status(201)
   res.json({data: target, user: req.user.id})
 }
