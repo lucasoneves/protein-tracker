@@ -16,7 +16,7 @@ export const forgotPasswordHandler = async (req, res) => {
       return
     }
 
-    const token = createJWT(user)
+    const token = createJWT(user, 150)
     const link = `http://localhost:3000/reset-password/${user.id}/${token}`
 
 
@@ -42,19 +42,20 @@ export const forgotPasswordHandler = async (req, res) => {
     };
 
     transporter.sendMail(mailOptions, function (err, info) {
-      if(err)
+      if (err)
         console.log(err)
       else
         console.log(info);
+      res.json({
+        data: {
+          message: 'Password link sended to email address',
+          link,
+        }
+      })
     });
 
 
-    res.json({
-      data: {
-        message: 'Password link sended to email address',
-        link,
-      }
-    })
+
   } catch (error) {
     res.status(error)
     res.json({ error })
