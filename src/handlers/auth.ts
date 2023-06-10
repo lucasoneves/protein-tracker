@@ -20,6 +20,7 @@ export const signup = async (req, res) => {
 };
 
 export const signin = async (req, res) => {
+  const ten_days = 10 * 86400
   const user = await prisma.user.findUnique({
     where: {
       email: req.body.email,
@@ -34,7 +35,7 @@ export const signin = async (req, res) => {
     return;
   }
 
-  const token = createJWT(user);
+  const token = createJWT(user, ten_days);
 
   res.json({ token });
 };

@@ -2,13 +2,14 @@ import * as bcrypt from "bcrypt";
 
 import jwt from "jsonwebtoken";
 
-export const createJWT = (user: any) => {
+export const createJWT = (user: any, expire?: number) => {
   const token = jwt.sign(
     {
       id: user.id,
-      email: user.username
+      email: user.username,
     },
-    process.env.JWT_SECRET!
+    process.env.JWT_SECRET!,
+    { expiresIn: expire}
   );
   return token;
 };
