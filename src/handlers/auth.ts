@@ -19,25 +19,31 @@ export const signup = async (req, res) => {
   res.json({ message: "user created" });
 };
 
-export const signin = async (req, res) => {
-  const ten_days = 10 * 86400
-  const user = await prisma.user.findUnique({
-    where: {
-      email: req.body.email,
-    },
-  });
+export const signin = async (req, res, next) => {
+  try {
+    const ten_days = 10 * 86400
+    const user = await prisma.user.findUnique({
+      where: {
+        email: req.body.email,
+      },
+    });
 
-  const isValid = await comparePasswords(req.body.password, user?.password);
+    const isValid = await comparePasswords(req.body.password, user?.password);
 
-  if (!isValid) {
-    res.status(401);
-    res.json({ message: "Not Authorized" });
-    return;
+
+    if (!isValid) {
+      res.status(401);
+      res.json({ message: "Not Authorized" });
+      return;
+    }
+
+    const token = createJWT(user, ten_days);
+
+    res.json({ token });
+  } catch (error: any) {
+    error.type = 'auth';
+    next(error);
   }
-
-  const token = createJWT(user, ten_days);
-
-  res.json({ token });
 };
 
 export const signout = async (req, res) => {

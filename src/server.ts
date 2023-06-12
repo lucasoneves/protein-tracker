@@ -5,6 +5,7 @@ import { signup, signin } from './handlers/auth';
 import { body } from 'express-validator';
 import { forgotPasswordHandler, resetPasswordHandler, sendNewPassword } from './handlers/password';
 import { handleInputErrors } from './modules/middleware';
+import { signinErrors } from './handlers/signinErrors';
 
 const app = express();
 
@@ -15,14 +16,27 @@ app.use('/api', protect, router);
 
 // Users routes
 app.post('/signup', body('username').isString(), body('email').isString(), body('password').isString(), handleInputErrors, signup);
-app.post('/signin', signin)
+app.post('/signin', body('email').exists().isString(), body('password').exists().isString(), signin)
 
-app.post('/forgot-password', forgotPasswordHandler);
+app.post('/forgot-password', body('email').exists().isString(), forgotPasswordHandler);
 // app.get('/forgot-password', (req, res) => {});
 
 app.get('/reset-password/:id/:token', resetPasswordHandler, (req, res, next) => {
 
 });
-app.post('/reset-password/:id/:token', body('password').isString(), body('confirm_password').isString(), handleInputErrors, sendNewPassword, (req, res) => { })
+app.post('/reset-password/:id/:token', body('password').exists().isString(), body('confirm_password').exists().isString(), handleInputErrors, sendNewPassword, (req, res) => { })
 
+app.use((err, req, res, next) => {
+  if (err.type === 'auth') {
+    res.status(401).json({ data: { message: "Not authorized" }})
+  }
+
+  else if (err.type === 'input') {
+    res.status(400).json({ data: { message: "Invalid input"}})
+  }
+
+  else {
+    res.status(500).json({ data: { message: "MY fault"}})
+  }
+})
 export default app;
