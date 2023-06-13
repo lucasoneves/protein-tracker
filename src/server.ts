@@ -5,7 +5,6 @@ import { signup, signin } from './handlers/auth';
 import { body } from 'express-validator';
 import { forgotPasswordHandler, resetPasswordHandler, sendNewPassword } from './handlers/password';
 import { handleInputErrors } from './modules/middleware';
-import { signinErrors } from './handlers/signinErrors';
 
 const app = express();
 
@@ -33,6 +32,10 @@ app.use((err, req, res, next) => {
 
   else if (err.type === 'input') {
     res.status(400).json({ data: { message: "Invalid input"}})
+  }
+
+  else if (err.type === 'signup') {
+    res.status(401).json({ data: { message: 'It was not possible to create user' }})
   }
 
   else {
