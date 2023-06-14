@@ -78,11 +78,18 @@ export const signout = async (req, res) => {
 };
 
 export const forgotPassword = async (req, res) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      email: req.body.email,
+  let userFound;
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: req.body.email,
+      }
+    })
+    userFound = user    
+    res.json({ user: user?.id, status: 200 });
+  } catch (error: any) {
+    if (!userFound) {
+      error.type('user_not_found');
     }
-  })
-
-  res.json({ user: user?.id, status: 200 });
+  }
 }
