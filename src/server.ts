@@ -5,7 +5,6 @@ import { signup, signin } from './handlers/auth';
 import { body } from 'express-validator';
 import { forgotPasswordHandler, resetPasswordHandler, sendNewPassword } from './handlers/password';
 import { handleInputErrors } from './modules/middleware';
-import { signinErrors } from './handlers/signinErrors';
 
 const app = express();
 
@@ -24,7 +23,7 @@ app.post('/forgot-password', body('email').exists().isString(), forgotPasswordHa
 app.get('/reset-password/:id/:token', resetPasswordHandler, (req, res, next) => {
 
 });
-app.post('/reset-password/:id/:token', body('password').exists().isString(), body('confirm_password').exists().isString(), handleInputErrors, sendNewPassword, (req, res) => { })
+app.post('/reset-password/:id/:token', body('password').notEmpty(), handleInputErrors, sendNewPassword)
 
 app.use((err, req, res, next) => {
   if (err.type === 'auth') {
@@ -33,6 +32,18 @@ app.use((err, req, res, next) => {
 
   else if (err.type === 'input') {
     res.status(400).json({ data: { message: "Invalid input"}})
+  }
+
+  else if (err.type === 'signup') {
+    res.status(401).json({ data: { message: 'It was not possible to create user' }})
+  }
+
+  else if (err.type === 'user_not_found') {
+    res.status(404).json({ data: { message: 'E-mail not found' }})
+  }
+
+  else if (err.type === 'password') {
+    res.status(404).json({ data: { message: 'There was an error trying to update password', err }})
   }
 
   else {
