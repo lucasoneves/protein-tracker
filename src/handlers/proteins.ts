@@ -1,30 +1,23 @@
 import prisma from "../db";
 import { validationResult } from "express-validator";
-export const getProteinInfo = async (req, res) => {
-  const id = req.params.id;
 
-  const proteinAmount = await prisma.proteinAmount.findFirst({
-    where: {
-      id,
-      belongsToId: req.user.id,
-    },
-  });
-
-  res.json({ data: { proteinAmount, status: 200, user: req.user.username } });
-};
-
-export const createProteinAmount = async (req, res) => {
-  const proteinAmount = await prisma.proteinAmount.create({
-    data: {
-      quantity: req.body.quantity,
-      belongsToId: req.user.id,
-    },
-  });
-
-  const errors = validationResult(req)
-  console.log("ERRORS:", errors)
-
-  res.json({ data: { proteinAmount, status: 200, user: req.user.username } });
+export const createProteinAmount = async (req, res, next) => {
+  try {
+    const proteinAmount = await prisma.proteinAmount.create({
+      data: {
+        quantity: req.body.quantity,
+        belongsToId: req.user.id,
+      },
+    });
+  
+    const errors = validationResult(req)
+    console.log("ERRORS:", errors)
+  
+    res.json({ data: { proteinAmount, status: 200, user: req.user.username } });
+  } catch (error: any) {
+    error.type = 'create-protein-amount';
+    next(error)
+  }
 };
 
 export const updateProteinAmount = async (req, res) => {
