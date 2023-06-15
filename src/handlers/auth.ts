@@ -25,11 +25,6 @@ export const signup = async (req, res, next) => {
     const existEmail = await prisma.user.findFirst({
       where: { email: req.body.email}
     })
-    if (!req.body.email || !req.body.password || !req.body.username) {
-      error.type = "user";
-      res.json({ data: { error: "All fields are required"}})
-      next(error);
-    }
 
     if (existEmail || existUser) {
       error.type = "signup";

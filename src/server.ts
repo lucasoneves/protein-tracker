@@ -14,7 +14,7 @@ app.use(express.json());
 app.use('/api', protect, router);
 
 // Users routes
-app.post('/signup', body('username').isString(), body('email').isString(), body('password').isString(), handleInputErrors, signup);
+app.post('/signup', body('username').isString().notEmpty(), body('email').isString().notEmpty(), body('password').isString().notEmpty(), handleInputErrors, signup);
 app.post('/signin', body('email').exists().isString(), body('password').exists().isString(), signin)
 
 app.post('/forgot-password', body('email').exists().isString(), forgotPasswordHandler);
@@ -35,7 +35,7 @@ app.use((err, req, res, next) => {
   }
 
   else if (err.type === 'signup') {
-    res.status(400).json({ errors: { message: 'It was not possible to create user' }})
+    res.status(400).json({ errors: { message: err }})
   }
 
   else if (err.type === 'user_not_found') {
