@@ -38,7 +38,7 @@ export const getUserInfo = async (req, res, next) => {
       ],
     });
   } catch (error: any) {
-    error.type = "user";
+    error.type = "error-handler";
     next(error);
   }
 };
@@ -56,7 +56,7 @@ export const updateUser = async (req, res, next) => {
 
     res.json({ user, message: "user updated successfully", status: 200 });
   } catch (error: any) {
-    error.type = "update-user";
+    error.type = "error-handler";
     next(error);
   }
 };
@@ -76,7 +76,7 @@ export const deleteUser = async (req, res, next) => {
 
     res.json({ message: "user deleted" });
   } catch (error: any) {
-    error.type = "delete-user";
+    error.type = "error-handler";
     next(error)
   }
 };
