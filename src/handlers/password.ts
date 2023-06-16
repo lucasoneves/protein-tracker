@@ -1,6 +1,6 @@
 import prisma from "../db";
 import jwt from "jsonwebtoken";
-import { comparePasswords, createJWT, hashPassword } from "../modules/auth";
+import { createJWT, hashPassword } from "../modules/auth";
 import nodemailer from "nodemailer";
 export const forgotPasswordHandler = async (req, res) => {
   // const user = req.user.username;
@@ -40,8 +40,6 @@ export const forgotPasswordHandler = async (req, res) => {
     };
 
     transporter.sendMail(mailOptions, function (err, info) {
-      if (err) console.log(err);
-      else console.log(info);
       res.json({
         data: {
           message: "Password link sended to email address",
@@ -93,9 +91,8 @@ export const sendNewPassword = async (req, res, next) => {
   const { password } = req.body;
 
   try {
-    console.log('error trycatch 2')
     const secret = process.env.JWT_SECRET!;
-    const payload = jwt.verify(token, secret)
+    const payload = jwt.verify(token, secret);
     const user = await prisma.user.update({
       where: {
         id: id,
@@ -104,11 +101,12 @@ export const sendNewPassword = async (req, res, next) => {
         password: await hashPassword(password),
       },
     });
-    res.json({ data: { message: "Password updated successfully", payload, user } });
+    res.json({
+      data: { message: "Password updated successfully", payload, user },
+    });
   } catch (error: any) {
-    error.type = 'password'
+    error.type = "password";
     console.log(error);
-    next(error)
+    next(error);
   }
-
 };

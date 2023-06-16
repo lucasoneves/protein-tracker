@@ -8,6 +8,8 @@ import { handleInputErrors } from './modules/middleware';
 
 const app = express();
 
+
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -26,6 +28,7 @@ app.get('/reset-password/:id/:token', resetPasswordHandler, (req, res, next) => 
 app.post('/reset-password/:id/:token', body('password').notEmpty(), handleInputErrors, sendNewPassword)
 
 app.use((err, req, res, next) => {
+  const messageError = res.status(400).json({ errors: err})
   if (err.type === 'auth') {
     res.status(401).json({ errors: { message: "Not authorized" }})
   }
@@ -34,28 +37,8 @@ app.use((err, req, res, next) => {
     res.status(400).json({ errors: { message: "Invalid input"}})
   }
 
-  else if (err.type === 'signup') {
-    res.status(400).json({ errors: { message: err }})
-  }
-
-  else if (err.type === 'user_not_found') {
-    res.status(400).json({ errors: { message: 'E-mail not found' }})
-  }
-
-  else if (err.type === 'password') {
-    res.status(400).json({ errors: { message: 'There was an error trying to update password', err }})
-  }
-
-  else if (err.type === 'user') {
-    res.status(400).json({ errors: { message: err}})
-  }
-
-  else if (err.type === 'update-user') {
-    res.status(400).json({ errors: err})
-  }
-
-  else if (err.type === 'delete-user') {
-    res.status(400).json({ errors: err })
+  else if (err.type === 'error-handler') {
+    messageError
   }
 
   else {
