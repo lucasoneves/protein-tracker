@@ -1,5 +1,7 @@
 import express from 'express';
 import router from './router';
+import morgan from 'morgan';
+import cors from 'cors';
 import { protect } from './modules/auth';
 import { signup, signin } from './handlers/auth';
 import { body } from 'express-validator';
@@ -9,9 +11,14 @@ import { handleInputErrors } from './modules/middleware';
 const app = express();
 
 
-
-app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+app.use(morgan('dev'))
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+app.get('/', (req, res) => {
+  res.json({ message: 'hello'});
+})
 
 app.use('/api', protect, router);
 
@@ -46,3 +53,11 @@ app.use((err, req, res, next) => {
   }
 })
 export default app;
+
+// function cors(): any {
+//   throw new Error('Function not implemented.');
+// }
+// function morgan(arg0: string): any {
+//   throw new Error('Function not implemented.');
+// }
+
