@@ -2,6 +2,7 @@ import prisma from "../db";
 import { comparePasswords, createJWT, hashPassword } from "../modules/auth";
 
 export const signup = async (req, res, next) => {
+  const message = "User created successfully"
   try {
     const user = await prisma.user.create({
       data: {
@@ -17,7 +18,7 @@ export const signup = async (req, res, next) => {
     }
   
     res.status(201);
-    res.json({ message: "user created", user });
+    res.json({ message });
   } catch (error: any) {
     const existUser = await prisma.user.findFirst({
       where: { username: req.body.username}
