@@ -1,12 +1,20 @@
-import * as user from '../auth';
-import supertest from 'supertest';
+import app from "../../server";
+import supertest from "supertest";
 
-describe('Sign In user', () => {
-  it('Should create a new user', async () => {
-    const req = { body: { username: 'hello', password: 'strongpassword'}}
-    const res = { json({token}) {
-      expect(token).toBeTruthy();
-    }}
-    await user.signin(req, res, () => {})
+describe("Sign up user", () => {
+  const payload = {
+    body: {
+      username: '',
+      email: 'lucasneves@gmail',
+      password: '123456'
+    }
+  }
+  const res = { message: "User created successfully" };
+  test("should respond with a 201 status code", async () => {
+    const response = await supertest(app).post('/signup').send({
+      username: 'glenda gibson',
+      email: 'glenda.gibson@example.com',
+      password: '123456'
+    }).expect(201);
   })
-})
+});
