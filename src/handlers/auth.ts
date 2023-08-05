@@ -11,20 +11,20 @@ export const signup = async (req, res, next) => {
         password: await hashPassword(req.body.password),
       },
     });
-  
+
     if (!user) {
       res.json({ error: "User not created" });
       return;
     }
-  
+
     res.status(201);
     res.json({ message });
   } catch (error: any) {
-    const existUser = await prisma.user.findFirst({
-      where: { username: req.body.username}
+    const existUser = await prisma.user.findUnique({
+      where: { username: req.body.username }
     })
-    const existEmail = await prisma.user.findFirst({
-      where: { email: req.body.email}
+    const existEmail = await prisma.user.findUnique({
+      where: { email: req.body.email }
     })
 
     if (existEmail || existUser) {
@@ -45,18 +45,17 @@ export const signin = async (req, res, next) => {
 
     const isValid = await comparePasswords(req.body.password, user?.password);
 
-
     if (!isValid) {
-      res.status(401);
-      res.json({ message: "Not Authorized" });
-      return;
+      return res.status(401).send({ message: "Email or password incorrect. Try again!" });
     }
 
     const token = createJWT(user, ten_days);
 
-    res.json({ token });
-  } catch (error: any) {
+    res.json({ token, user: { username: user.username, id: user.id, createdAt: user.createdAt } });
+  } catch (error) {
     error.type = 'auth';
+    res.status(401)
+    res.json({ message: "It was not possible to login, verify your info and try again", field: "auth" })
     next(error);
   }
 };
@@ -81,7 +80,7 @@ export const forgotPassword = async (req, res) => {
         email: req.body.email,
       }
     })
-    userFound = user    
+    userFound = user
     res.json({ user: user?.id, status: 200 });
   } catch (error: any) {
     if (!userFound) {

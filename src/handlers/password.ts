@@ -3,11 +3,11 @@ import jwt from "jsonwebtoken";
 import { createJWT, hashPassword } from "../modules/auth";
 import nodemailer from "nodemailer";
 export const forgotPasswordHandler = async (req, res) => {
-  // const user = req.user.username;
+  const userEmail = req.body.email;
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
-        email: req.body.email,
+        email: userEmail,
       },
     });
 
@@ -31,7 +31,7 @@ export const forgotPasswordHandler = async (req, res) => {
 
     const mailOptions = {
       from: "proteincheck.app@gmail.com", // sender address
-      to: req.body.email, // list of receivers
+      to: userEmail, // list of receivers
       subject: "Protein Check - Create new password",
       html: `<b>Hey there! </b><br> You requested help recovering your password.
       
@@ -48,7 +48,7 @@ export const forgotPasswordHandler = async (req, res) => {
       });
     });
   } catch (error) {
-    res.status(error);
+    res.status(404);
     res.json({ error });
   }
 };
