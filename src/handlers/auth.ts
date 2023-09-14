@@ -29,6 +29,7 @@ export const signup = async (req, res, next) => {
 
     if (existEmail || existUser) {
       error.type = "signup";
+      res.json({ error: "User not created" });
       next(error)
     }
   }
