@@ -13,7 +13,7 @@ export const signup = async (req, res, next) => {
     });
 
     if (!user) {
-      res.json({ error: "User not created" });
+      res.status(401).json({ error: "User not created" });
       return;
     }
 
