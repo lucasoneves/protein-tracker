@@ -15,7 +15,7 @@ export const getUserInfo = async (req, res, next) => {
       },
     });
 
-    const proteintarget = await prisma.proteinTarget.findMany({
+    const proteinTarget = await prisma.proteinTarget.findMany({
       where: {
         belongsToId: userId,
       },
@@ -33,7 +33,7 @@ export const getUserInfo = async (req, res, next) => {
           id: user?.id,
           username: user?.username,
           proteinAmount,
-          proteintarget,
+          proteinTarget,
         },
       ],
     });

@@ -13,24 +13,19 @@ export const signup = async (req, res, next) => {
     });
 
     if (!user) {
-      res.json({ error: "User not created" });
+      res.status(401).json({ error: "User not created" });
       return;
     }
 
+    console.log("passei por aqui")
     res.status(201);
     res.json({ message });
   } catch (error: any) {
-    const existUser = await prisma.user.findUnique({
-      where: { username: req.body.username }
-    })
-    const existEmail = await prisma.user.findUnique({
-      where: { email: req.body.email }
-    })
 
-    if (existEmail || existUser) {
-      error.type = "signup";
-      next(error)
-    }
+    error.type = 'auth';
+    res.status(401)
+    res.json({ message: "It was not possible to login, verify your info and try again", field: "auth" })
+    next(error);
   }
 };
 
