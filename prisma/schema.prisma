@@ -33,7 +33,7 @@ model ProteinAmount {
 
 model ProteinTarget {
   id         String   @id @default(uuid())
-  target     Float?
+  target     Float? @default(0)
   createdAt  DateTime @default(now()) @db.Timestamptz()
   belongsToId String   @db.VarChar(255)
   belongsTo  User     @relation(fields: [belongsToId], references: [id])
