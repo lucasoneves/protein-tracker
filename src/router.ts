@@ -15,14 +15,14 @@ const router = Router();
 
 // Protein Amount
 router.get("/proteinamount", getUserInfo);
-router.post("/proteinamount/", body('quantity').isNumeric().notEmpty(), handleInputErrors, createProteinAmount);
+router.post("/proteinamount", body('quantity').isNumeric().notEmpty(), handleInputErrors, createProteinAmount);
 router.put("/proteinamount/:id", body('quantity').isNumeric(), handleInputErrors, updateProteinAmount);
 
 router.delete("/proteinamount/:id", deleteProteinAmount);
 
 // PRotein target
 router.post("/proteintarget", body('target').isNumeric().notEmpty(), handleInputErrors, setProteinTarget);
-router.delete("/proteintarget/", deleteProteinTarget);
+router.delete("/proteintarget", deleteProteinTarget);
 router.put("/proteintarget/:id", body('target').isNumeric(), handleInputErrors, updateProteinTarget);
 
 // User
