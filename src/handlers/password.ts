@@ -12,9 +12,10 @@ export const forgotPasswordHandler = async (req, res) => {
     });
 
     if (!user) {
-      res.json({ message: "User not found. Verify the email field" });
+      res.send(204)
       return;
     }
+    
 
     const token = user && createJWT(user, 150);
     const link = `http://localhost:3000/reset-password/${user.id}/${token}`;
@@ -48,8 +49,8 @@ export const forgotPasswordHandler = async (req, res) => {
       });
     });
   } catch (error) {
-    res.status(404);
-    res.json({ error });
+    res.type('json')
+    res.json({ error, message: "ooow" });
   }
 };
 
@@ -86,6 +87,26 @@ export const resetPasswordHandler = async (req, res) => {
   }
 };
 
+export const recoverPasswordHandler = async (req, res) => {
+  const { email } = req.email;
+
+  const user = await prisma.user.findFirst({
+    where: {
+      email
+    }
+  })
+
+  if (!user) {
+    res.status(404);
+    res.json({
+      error: {
+        message: "Email not found"
+      }
+    })
+    return;
+  }
+}
+
 export const sendNewPassword = async (req, res, next) => {
   const { id, token } = req.params;
   const { password } = req.body;
@@ -102,7 +123,7 @@ export const sendNewPassword = async (req, res, next) => {
       },
     });
     res.json({
-      data: { message: "Password updated successfully", payload, user },
+      data: { message: "Password updated successfully", payload },
     });
   } catch (error: any) {
     error.type = "password";
