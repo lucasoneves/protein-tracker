@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 app.use('/api', protect, router);
 
 // Users routes
-app.post('/signup', body('username').isString().notEmpty(), body('email').isString().notEmpty(), body('password').isString().notEmpty(), handleInputErrors, signup);
+app.post('/signup', body('username').isString().exists(), body('email').isString().notEmpty(), body('password').isString().notEmpty(), handleInputErrors, signup);
 app.post('/signin', body('email').exists().isString(), body('password').exists().isString(), signin)
 
 app.post('/forgot-password', body('email').exists().isString(), forgotPasswordHandler);
