@@ -4,7 +4,7 @@ import { comparePasswords, createJWT, hashPassword } from "../modules/auth";
 export const signup = async (req, res, next) => {
   const message = "User created successfully"
   try {
-    const userExists = await prisma.user.findMany({
+    const userExists = await prisma.user.findFirst({
       where: {
         OR: [
           {
@@ -17,8 +17,10 @@ export const signup = async (req, res, next) => {
       }
     })
 
+    console.log(userExists)
+
     if (userExists) {
-      res.status(409).json({ error: "Username or email already been used"})
+      res.send(204)
       return;
     }
 
@@ -30,12 +32,10 @@ export const signup = async (req, res, next) => {
       },
     });
     if (!user) {
-      res.status(401).json({ error: "User not created" });
+      res.status(401).json({ data: { message: 'User not created', status: 401} });
       return;
     }
-
-    res.status(201);
-    res.json({ message });
+    res.status(201).json({ data: { message, status: 201} });
   } catch (error: any) {
     error.type = 'auth';
     res.status(401)
