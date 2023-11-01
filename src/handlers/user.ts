@@ -1,6 +1,11 @@
 import prisma from "../db";
 
 export const getUserInfo = async (req, res, next) => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = (today.getMonth() + 1).toString().padStart(2, '0');
+  const day = today.getDate().toString().padStart(2, '0');
+  const CURRENT_DAY = `${year}-${month}-${day}`;
   try {
     const userId = req.user.id;
     const user = await prisma.user.findUnique({
@@ -12,6 +17,11 @@ export const getUserInfo = async (req, res, next) => {
     const proteinAmount = await prisma.proteinAmount.findMany({
       where: {
         belongsToId: userId,
+        createdAt: {
+          gte: new Date(
+            `${CURRENT_DAY}T00:00:00+0200`
+          ) /* Includes time offset for UTC */,
+        }
       },
     });
 
