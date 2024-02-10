@@ -15,10 +15,10 @@ export const forgotPasswordHandler = async (req, res) => {
       res.send(204)
       return;
     }
-    
+
 
     const token = user && createJWT(user, 150);
-    const link = `http://localhost:3000/reset-password/${user.id}/${token}`;
+    const link = `${process.env.NODE_ENV === 'development' ? `http://localhost:3000` : `https://protein-check-front-e7fxy60bv-lucasoneves.vercel.app`}/reset-password/${user.id}/${token}`;
 
     const transporter = nodemailer.createTransport({
       port: 465, // true for 465, false for other ports
