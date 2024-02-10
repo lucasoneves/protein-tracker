@@ -17,8 +17,6 @@ export const signup = async (req, res, next) => {
       }
     })
 
-    console.log(userExists)
-
     if (userExists) {
       res.send(204)
       return;
