@@ -37,7 +37,7 @@ export const signup = async (req, res, next) => {
   } catch (error: any) {
     error.type = 'auth';
     res.status(401)
-    res.json({ message: "It was not possible to login, verify your info and try again", field: "auth" })
+    res.json({ message: "It was not possible to login, verify your info and try again", field: "signup", error })
     next(error);
   }
 };
@@ -63,7 +63,7 @@ export const signin = async (req, res, next) => {
   } catch (error) {
     error.type = 'auth';
     res.status(401)
-    res.json({ message: "It was not possible to login, verify your info and try again", field: "auth" })
+    res.json({ message: "It was not possible to login, verify your info and try again", field: "signin", error })
     next(error);
   }
 };
